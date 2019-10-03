@@ -2,6 +2,7 @@ import React from 'react';
 import superagent from 'superagent';
 import { makeStyles } from '@material-ui/core';
 import { flexbox } from '@material-ui/system';
+import {withRouter} from 'react-router-dom'
 
 const APIKEY = '2c73b0f220a02912d9c2cd39c09588e2';
 const SERVER = 'https://api.themoviedb.org';
@@ -24,13 +25,17 @@ function Search(props) {
         });
     }
 
+    const handleClick = (myID) => {
+        props.history.push('/movie/' + myID)
+    }
+
     return (
         <div onKeyPress={handleInput}>
             <input type="text" className={classes.search} placeholder={"Search for movie title"} />
 
             {movies && <ul className={classes.lista}>
                 {movies.map((elem) => {
-                    return <li className={classes.items} key={elem.id}>{elem.title} - {elem.id}</li>
+                    return <li onClick={() => handleClick(elem.id)} key={elem.id}>{elem.title} - {elem.id}</li>
                     //Usar el ID para traer toda la info de la peli /movie/id
                 })}
             </ul>}
@@ -65,4 +70,4 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-export default Search;
+export default withRouter(Search);

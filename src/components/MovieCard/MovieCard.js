@@ -1,33 +1,41 @@
-import React from 'react';
+  import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { flexbox } from '@material-ui/system';
+import transformInfo from '../../components/utils/transformInfo'
 
-function MovieCard() {
+function MovieCard(props) {
     const classes = useStyles();
+    const [movie, setMovie] = useState({});
 
+    useEffect(() => {
+        var promise = fetch(`https://api.themoviedb.org/3/movie/${props.id}?api_key=2c73b0f220a02912d9c2cd39c09588e2`);
+        promise.then((info) => info.json()).then((response) => {
+            setMovie(transformInfo(response));
+        });
+    }, [props.id])
 
 
     return (
         <div className={classes.MovieCard}>
 
             <div className={classes.imagen}>
-                <img className={classes.imagenI} src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQh1XjYErppgcnNVYpFazgLn196HBsqpRFHSPVC80cB89VqXVQeEw'></img>
+                <img className={classes.imagenI} src={"https://image.tmdb.org/t/p/w500"+(movie.img)}></img>
             </div>
 
             <div className={classes.Contenido}>
 
-                <h2 className={classes.Contenido__Titulo}>KUNG FU PANDA</h2>
-                <p className={classes.Contenido__frase}>El guerrero dragon</p>
-                <p className={classes.info}> La historia se desarrolla en el Valle de la Paz, un lugar ficticio de la Antigua China habitado por animales antropomorfos. Po (Jack Black), un joven panda torpe y con sobrepeso, es un entusiasta del kung-fu que idolatra a los Cinco Furiosos, que son los guerreros más poderosos del kung fu. </p>
+                <h2 className={classes.Contenido__Titulo}>{movie.title}</h2>
+                <p className={classes.Contenido__frase}>{movie.tagline}</p>
+                <p className={classes.info}> {movie.info} </p>
                 <p className={classes.Contenido__cat}>Comedia, Pandas, Kung Fu</p>
                 <p className={classes.info}>DreamWorks Animation, Paramount Pictures</p>
 
                 <div className={classes.MasInfo}>
                     <div className={classes.Extras1}>
                         <p className={classes.info}>Original Release: </p>
-                        <p className={classes.infogreen}>2014-11-05</p>
+                        <p className={classes.infogreen}>{movie.date}}</p>
                         <p className={classes.info}>Box Office: </p>
-                        <p className={classes.infogreen}>$675,120,017</p>
+                        <p className={classes.infogreen}>{movie.money}</p>
                     </div>
 
                     <div className={classes.Extras2}>
